@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <style>
+        h2 {
+            text-align: center;
+            color: #007BFF; /* Header text color */
+        }
+    
+        form {
+            text-align: center;
+        }
+    
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    
+        input[type="text"],
+        input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    
+        button {
+            background: #007BFF;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        button:hover {
+            background: #0056b3;
+        }
+    
+        /* Style for the registration link */
+        p {
+            text-align: center;
+            margin-top: 10px;
+        }
+    
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+    
+        a:hover {
+            text-decoration: underline;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg?size=626&ext=jpg&ga=GA1.1.386372595.1698278400&semt=sph');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .container {
+            width: 400px;
+            margin: 0 auto;
+            margin-top: 100px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        .options {
+            text-align: center;
+        }
+        .options a {
+            display: inline-block;
+            text-decoration: none;
+            padding: 10px;
+            margin: 10px;
+            background: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-form {
+            display: none;
+        }
+        .login-form.active {
+            display: block;
+        }
+
+        #btn{
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="options">
+            <a onclick="showLogin('user')">User Login</a>
+            <a onclick="showLogin('shopkeeper')">Shopkeeper Login</a>
+        </div>
+        <div id="userLogin" class="login-form">
+            <h2>User Login</h2>
+            <form action="/login" method="POST">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+                <br>
+                <label for "password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <br>
+                <button type="submit" id="btn">Login</button>
+                <p>If you are a new user, <a href="/new_user_register">click here to register</a>.</p>
+            </form>
+        </div>
+        <div id="shopkeeperLogin" class=" login-form">
+            <h2>Shop Login</h2>
+            <form action="/shop_login" method="POST">
+                <label for="username">Username</label>
+                <input type="text" id="user" name="username" required>
+                <br>
+                <label for="password">Password</label>
+                <input type="password" id="pass" name="password" required>
+                <br>
+                <button type="submit" id="btn">Login</button>
+                <p>If you are a new Shopkeeper, <a href="/new_shop_register">click here to register</a>.</p>
+            </form>
+        </div>
+    </div>
+    <script>
+        function showLogin(type) {
+            document.getElementById('userLogin').classList.remove('active');
+            document.getElementById('shopkeeperLogin').classList.remove('active');
+            document.getElementById(type + 'Login').classList.add('active');
+        }
+    </script>
+</body>
+</html>

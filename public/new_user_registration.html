@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <style>
+        /* Style for the Login form */
+        h2 {
+            text-align: center;
+            color: #007BFF;
+        }       
+    
+        .login-form {
+            text-align: center;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+    
+        .form-group {
+            margin-bottom: 20px;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    
+        .container {
+            width: 400px;
+            margin: 0 auto;
+            margin-top: 100px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            background: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg?size=626&ext=jpg&ga=GA1.1.386372595.1698278400&semt=sph');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #btn{
+            font-size: 15px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <h2>User Register</h2>
+        <form class="login-form" action="/signup" method="POST">
+            <div class="form-group">
+                <label for="username">Enter Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Enter Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="btn">Submit</button>
+            </div>
+            <p>If you are a existing user, <a href="home.html">click here to Register</a>.</p>
+        </form>
+    </div>
+</body>
+</html>
+

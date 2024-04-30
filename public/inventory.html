@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Management</title>
+    <style>
+        /* Styles for Inventory Management Page */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    margin-top: 0;
+    border-radius: 5px 5px 0 0;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+.add-form {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 32%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    width: 32%;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #555;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.delete-item,
+.edit-item {
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.delete-item:hover,
+.edit-item:hover {
+    background-color: #555;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inventory Management</h1>
+        
+        <div class="add-form">
+            <h2>Add Item</h2>
+            <form id="addItemForm">
+                
+                <input type="text" id="itemName" placeholder="Item Name" required>
+                <input type="text" id="itemDescription" placeholder="Item Description" required>
+                <input type="number" id="itemQuantity" placeholder="Quantity" required>
+                <input type="number" id="itemPrice" placeholder="Price" required>
+                <input type="hidden" id="shop_address" name="shop_address">
+                <input type="hidden" id="shop_name" name="shop_name">
+                <input type="hidden" id="phone_number" name="phone_number">
+                <input type="hidden" id="latitude" name="latitude">
+                <input type="hidden" id="longitude" name="longitude">
+                <button type="submit">Add Item</button>
+            </form>
+        </div>
+
+        <h2>Inventory</h2>
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Inventory data will be displayed here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const addItemForm = document.getElementById('addItemForm');
+        const inventoryTable = document.getElementById('inventoryTable');
+        const itemNameInput = document.getElementById('itemName');
+        const itemDescriptionInput = document.getElementById('itemDescription');
+        const itemQuantityInput = document.getElementById('itemQuantity');
+        const itemPriceInput = document.getElementById('itemPrice');
+        const itemShopName = document.getElementById('shop_name');
+        const itemPhoneNumber = document.getElementById('phone_number');
+        const itemShopAddress = document.getElementById('shop_address');
+        const itemLatitude = document.getElementById('latitude');
+        const itemLongitude = document.getElementById('longitude');
+        
+        fetch('/api/check-login-credentials')
+            .then(response => response.json())
+            .then(data => {
+                // Check the data to determine the user's login status
+                const isAuthenticated = data.isLoggedIn;
+                const isShopkeeper = data.shopLoggedIn;
+                const shopAddress = data.shopAddress;
+                const shopName = data.shopName;
+                const phoneNumber = data.phoneNumber;
+                const latitude = data.latitude;
+                const longitude = data.longitude;
+                
+                document.getElementById('phone_number').value = phoneNumber;
+                document.getElementById('shop_name').value = shopName;
+                document.getElementById('shop_address').value = shopAddress;
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+            
+            })
+            .catch(error => {
+                console.error('Error checking login status:', error);
+        });
+
+        // Function to fetch and display inventory data
+        async function fetchAndDisplayInventory() {
+            const response = await fetch('/api/inventory');
+            const data = await response.json();
+            displayInventory(data);
+        }
+
+        // Function to display inventory data
+        function displayInventory(data) {
+            inventoryTable.querySelector('tbody').innerHTML = '';
+            data.forEach(item => {
+                // Inside the displayInventory function
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.item}</td>
+                    <td>${item.description}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price}</td>
+                    <td>
+                        <button class="delete-item" data-item-name="${item.item}" data-item-description="${item.description}">Delete</button>
+                        <button class="edit-item" data-item-name="${item.item}" data-item-description="${item.description}">Edit</button>
+                    </td>
+                `;
+                inventoryTable.querySelector('tbody').appendChild(row);
+            });
+        }
+
+        // Event listener for adding an item
+        addItemForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newItemName = itemNameInput.value;
+            const newItemDescription = itemDescriptionInput.value;
+            const newItemQuantity = itemQuantityInput.value;
+            const newItemPrice = itemPriceInput.value;
+            const newItemShopName = itemShopName.value;
+            const newItemPhoneNumber = itemPhoneNumber.value;
+            const newItemShopAddress = itemShopAddress.value;
+            const newItemLatitude = itemLatitude.value;
+            const newItemLongitude = itemLongitude.value;
+            
+            if (newItemName && newItemDescription && newItemQuantity && newItemPrice && newItemShopName && newItemShopAddress && newItemPhoneNumber && newItemLatitude && newItemLongitude) {
+                await fetch('/api/items', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        item: newItemName,
+                        description: newItemDescription,
+                        quantity: newItemQuantity,
+                        price: newItemPrice,
+                        shop_name: newItemShopName,
+                        phone_number: newItemPhoneNumber,
+                        shop_address: newItemShopAddress,
+                        latitude: newItemLatitude,
+                        longitude: newItemLongitude
+                    })
+                });
+                itemNameInput.value = '';
+                itemDescriptionInput.value = '';
+                itemQuantityInput.value = '';
+                itemPriceInput.value = '';
+                fetchAndDisplayInventory();
+            }
+        });
+
+        // Event listener for deleting an item
+inventoryTable.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('delete-item')) {
+        const itemName = e.target.getAttribute('data-item-name');
+        const itemDescription = e.target.getAttribute('data-item-description');
+        const newItemShopName = itemShopName.value;
+        try {
+            const response = await fetch(`/api/items/${itemName}/${newItemShopName}/${itemDescription}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                fetchAndDisplayInventory();
+            } else {
+                console.error('Deletion unsuccessful');
+            }
+        } catch (error) {
+            console.error('Error deleting item:', error);
+        }
+    }
+});
+// Inside the event listener for editing an item
+inventoryTable.addEventListener('click', (e) => {
+    if (e.target.classList.contains('edit-item')) {
+        const itemName = e.target.getAttribute('data-item-name');
+        const itemDescription = e.target.getAttribute('data-item-description');
+        const newItemShopName = itemShopName.value;
+        const newQuantity = prompt('Enter the new quantity:');
+        const newPrice = prompt("Enter the new price:");
+        if (newQuantity !== null && newPrice !== null) {
+            fetch(`/api/items/${itemName}/${newItemShopName}/${itemDescription}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ quantity: newQuantity, price:newPrice })
+            }).then((response) => {
+                if (response.ok) {
+                    fetchAndDisplayInventory();
+                } else {
+                    console.error('Update unsuccessful:', response.statusText);
+                }
+            });
+        }
+    }
+});
+
+
+        // Initial fetch and display of inventory data
+        fetchAndDisplayInventory();
+    </script>
+</body>
+</html>
